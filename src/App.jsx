@@ -164,6 +164,10 @@ export default function SketchDrawApp() {
           .message-copy {
             text-align: center !important;
           }
+          .message-copy p {
+            font-size: 1.04rem !important;
+            line-height: 1.85 !important;
+          }
           .carousel-controls {
             flex-wrap: wrap !important;
             justify-content: center !important;
@@ -321,8 +325,8 @@ export default function SketchDrawApp() {
             </p>
             <p style={{
               color: "rgba(255,226,238,0.9)",
-              fontSize: "0.98rem",
-              lineHeight: "1.9",
+              fontSize: "clamp(1.02rem, 3.8vw, 1.12rem)",
+              lineHeight: "1.95",
               margin: 0,
               fontStyle: "italic",
             }}>
@@ -364,8 +368,8 @@ export default function SketchDrawApp() {
             </p>
             <p style={{
               color: "rgba(255,220,235,0.9)",
-              fontSize: "0.95rem",
-              lineHeight: "1.7",
+              fontSize: "clamp(1.02rem, 3.8vw, 1.12rem)",
+              lineHeight: "1.8",
               margin: 0,
             }}>
               Take your time, Chhaba the Don... but choose wisely.
@@ -397,6 +401,7 @@ export default function SketchDrawApp() {
                     transformOrigin: "center",
                     transition: "transform 0.15s ease-out, box-shadow 0.2s ease-out, background 0.2s ease-out",
                     minWidth: "80px",
+                    minHeight: "42px",
                   }}
                 >
                   Yes
@@ -419,6 +424,7 @@ export default function SketchDrawApp() {
                     fontWeight: 500,
                     transition: "background 0.2s ease-out, border-color 0.2s ease-out",
                     minWidth: "80px",
+                    minHeight: "42px",
                   }}
                 >
                   No
@@ -553,7 +559,7 @@ export default function SketchDrawApp() {
         }}>
           <h2 className="message-title" style={{
             color: "#ffd6e7",
-            fontSize: "clamp(1.8rem, 4vw, 2.5rem)",
+            fontSize: "clamp(2rem, 7vw, 2.7rem)",
             fontWeight: "400",
             letterSpacing: "clamp(2px, 1.2vw, 8px)",
             textTransform: "uppercase",
@@ -567,8 +573,8 @@ export default function SketchDrawApp() {
 
           <div className="message-copy" style={{
             color: "rgba(255,223,236,0.92)",
-            fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
-            lineHeight: "1.8",
+            fontSize: "clamp(1.05rem, 3.4vw, 1.2rem)",
+            lineHeight: "1.9",
             letterSpacing: "0.5px",
             textAlign: "left",
             fontStyle: "italic",
