@@ -173,6 +173,14 @@ export default function SketchDrawApp() {
             justify-content: center !important;
             row-gap: 10px !important;
           }
+          .shadow-card p {
+            font-size: 1.08rem !important;
+            line-height: 2 !important;
+          }
+          .valentine-actions button {
+            font-size: 0.95rem !important;
+            letter-spacing: 1.4px !important;
+          }
         }
         @media (max-width: 480px) {
           .question-card,
@@ -185,8 +193,13 @@ export default function SketchDrawApp() {
           }
           .valentine-actions button {
             min-width: 72px !important;
+            min-height: 46px !important;
             padding-left: 18px !important;
             padding-right: 18px !important;
+          }
+          .shadow-card p {
+            font-size: 1.12rem !important;
+            line-height: 2.05 !important;
           }
         }
         .heart-firework {
