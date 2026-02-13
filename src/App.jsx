@@ -173,6 +173,11 @@ export default function SketchDrawApp() {
             justify-content: center !important;
             row-gap: 10px !important;
           }
+          .shadow-card {
+            width: min(680px, 98vw) !important;
+            max-width: 98vw !important;
+            padding: 30px 20px 34px !important;
+          }
           .shadow-card p {
             font-size: 1.08rem !important;
             line-height: 2 !important;
@@ -186,7 +191,7 @@ export default function SketchDrawApp() {
           .question-card,
           .shadow-card {
             border-radius: 16px !important;
-            padding: 20px 14px !important;
+            padding: 24px 18px !important;
           }
           .valentine-actions {
             gap: 10px !important;
