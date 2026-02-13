@@ -1,8 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 const NO_LOCK_KEY = "valentine_no_lock_v1";
 const RESET_QUERY_KEY = "__resetValentineLock";
-const PHOTO_URLS = Array.from({ length: 9 }, (_, i) => `${import.meta.env.BASE_URL}photos/${i + 1}.jpeg`);
+const PHOTO_COUNT = 9;
+
+const getRepoBasePath = () => {
+  if (typeof window === "undefined") return "/";
+  const { hostname, pathname } = window.location;
+  const firstSegment = pathname.split("/").filter(Boolean)[0];
+  if (hostname.endsWith("github.io") && firstSegment) {
+    return `/${firstSegment}/`;
+  }
+  return "/";
+};
+
+const getPhotoCandidates = (index) => {
+  const fileName = `${index + 1}.jpeg`;
+  const envBase = import.meta.env.BASE_URL || "/";
+  const repoBase = getRepoBasePath();
+  return Array.from(
+    new Set([
+      `${envBase}photos/${fileName}`,
+      `${repoBase}photos/${fileName}`,
+      `/photos/${fileName}`,
+      `photos/${fileName}`,
+      `./photos/${fileName}`,
+    ]),
+  );
+};
 
 const readNoLock = () => {
   try {
@@ -40,6 +65,9 @@ export default function SketchDrawApp() {
   const [isNoLocked, setIsNoLocked] = useState(() => (resetRequested ? false : readNoLock()));
   const [noCount, setNoCount] = useState(() => (resetRequested ? 0 : (readNoLock() ? 7 : 0)));
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageAttempt, setImageAttempt] = useState(0);
+  const photoCandidates = useMemo(() => getPhotoCandidates(currentImageIndex), [currentImageIndex]);
+  const currentPhotoSrc = photoCandidates[Math.min(imageAttempt, photoCandidates.length - 1)];
 
   useEffect(() => {
     try {
@@ -67,10 +95,11 @@ export default function SketchDrawApp() {
 
   useEffect(() => {
     setImageLoaded(false);
+    setImageAttempt(0);
   }, [currentImageIndex]);
 
   const showShadowScreen = isNoLocked || (!valentineAccepted && noCount >= 7);
-  const totalPhotos = PHOTO_URLS.length;
+  const totalPhotos = PHOTO_COUNT;
 
   const changePhoto = (direction) => {
     setCurrentImageIndex((prev) => (prev + direction + totalPhotos) % totalPhotos);
@@ -431,10 +460,16 @@ export default function SketchDrawApp() {
             justifyContent: "center",
           }}>
             <img
-              src={PHOTO_URLS[currentImageIndex]}
+              src={currentPhotoSrc}
               alt={`Valentine photo ${currentImageIndex + 1}`}
               onLoad={() => setImageLoaded(true)}
-              onError={() => setImageLoaded(false)}
+              onError={() => {
+                if (imageAttempt < photoCandidates.length - 1) {
+                  setImageAttempt((prev) => prev + 1);
+                  return;
+                }
+                setImageLoaded(false);
+              }}
               style={{
                 width: "100%",
                 height: "100%",
