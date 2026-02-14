@@ -141,6 +141,7 @@ export default function SketchDrawApp() {
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [musicAttempt, setMusicAttempt] = useState(0);
   const [musicLoadFailed, setMusicLoadFailed] = useState(false);
+  const [musicPrimedByChoice, setMusicPrimedByChoice] = useState(false);
   const isSadMusicMode = isNoLocked || noCount >= 7;
   const isLoveMusicMode = valentineAccepted && !isSadMusicMode;
   const photoCandidates = useMemo(() => getPhotoCandidates(currentImageIndex), [currentImageIndex]);
@@ -231,6 +232,11 @@ export default function SketchDrawApp() {
 
   const handleYesClick = () => {
     if (isNoLocked) return;
+    if (!musicPrimedByChoice && !musicLoadFailed) {
+      tryStartMusic();
+      setMusicPrimedByChoice(true);
+      return;
+    }
     tryStartMusic();
     setNoCount(0);
     setYesScale(1);
@@ -239,6 +245,11 @@ export default function SketchDrawApp() {
 
   const handleNoClick = () => {
     if (isNoLocked) return;
+    if (!musicPrimedByChoice && !musicLoadFailed) {
+      tryStartMusic();
+      setMusicPrimedByChoice(true);
+      return;
+    }
     tryStartMusic();
     setNoCount((prev) => {
       const next = Math.min(7, prev + 1);
@@ -285,13 +296,19 @@ export default function SketchDrawApp() {
           .app-shell {
             padding: 20px 12px !important;
             gap: 20px !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
           }
           .main-container {
             gap: 24px !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            max-width: 100% !important;
           }
           .message-panel {
-            width: min(560px, 94vw) !important;
-            padding: 16px 10px !important;
+            width: 98vw !important;
+            max-width: 98vw !important;
+            padding: 20px 14px !important;
             align-items: center !important;
           }
           .message-title {
@@ -309,11 +326,28 @@ export default function SketchDrawApp() {
             flex-wrap: wrap !important;
             justify-content: center !important;
             row-gap: 10px !important;
+            width: 96vw !important;
+          }
+          .question-card {
+            width: 98vw !important;
+            max-width: 98vw !important;
+            padding: 30px 20px !important;
+            box-sizing: border-box !important;
+          }
+          .photo-frame {
+            width: 96vw !important;
+            max-width: 96vw !important;
+          }
+          .question-card img,
+          .shadow-card img {
+            width: min(520px, calc(100vw - 56px)) !important;
+            max-width: 100% !important;
           }
           .shadow-card {
             width: min(680px, 98vw) !important;
             max-width: 98vw !important;
             padding: 30px 20px 34px !important;
+            box-sizing: border-box !important;
           }
           .shadow-card p {
             font-size: 1.08rem !important;
@@ -328,20 +362,37 @@ export default function SketchDrawApp() {
           .question-card,
           .shadow-card {
             border-radius: 16px !important;
-            padding: 24px 18px !important;
+            width: 99vw !important;
+            max-width: 99vw !important;
+            padding: 26px 18px !important;
+            box-sizing: border-box !important;
           }
           .valentine-actions {
             gap: 10px !important;
+            flex-wrap: wrap !important;
           }
           .valentine-actions button {
-            min-width: 72px !important;
-            min-height: 46px !important;
-            padding-left: 18px !important;
-            padding-right: 18px !important;
+            min-width: 88px !important;
+            min-height: 50px !important;
+            font-size: 1rem !important;
+            padding-left: 20px !important;
+            padding-right: 20px !important;
           }
           .shadow-card p {
-            font-size: 1.12rem !important;
+            font-size: 1.16rem !important;
             line-height: 2.05 !important;
+          }
+          .message-copy p {
+            font-size: 1.1rem !important;
+          }
+          .photo-frame {
+            width: 98vw !important;
+            max-width: 98vw !important;
+          }
+          .question-card img,
+          .shadow-card img {
+            width: calc(100vw - 46px) !important;
+            max-width: 100% !important;
           }
         }
         .heart-firework {
@@ -522,8 +573,9 @@ export default function SketchDrawApp() {
               style={{
                 width: "min(320px, 85vw)",
                 height: "auto",
+                display: "block",
+                margin: "0 auto 16px",
                 borderRadius: "12px",
-                marginBottom: "16px",
                 boxShadow: "0 10px 24px rgba(0,0,0,0.35)",
                 border: "1px solid rgba(255, 183, 208, 0.55)",
               }}
@@ -582,8 +634,9 @@ export default function SketchDrawApp() {
               style={{
                 width: "min(320px, 84vw)",
                 height: "auto",
+                display: "block",
+                margin: "0 auto 18px",
                 borderRadius: "14px",
-                marginBottom: "18px",
                 boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
                 border: "1px solid rgba(255, 197, 220, 0.6)",
               }}
@@ -683,7 +736,7 @@ export default function SketchDrawApp() {
           alignItems: "center",
           gap: "clamp(12px, 2.6vw, 20px)",
         }}>
-          <div style={{
+          <div className="photo-frame" style={{
             position: "relative",
             borderRadius: "10px",
             overflow: "hidden",
