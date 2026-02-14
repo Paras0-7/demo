@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 
 const NO_LOCK_KEY = "valentine_no_lock_v1";
 const RESET_QUERY_KEY = "__resetValentineLock";
-const PHOTO_COUNT = 9;
+const PHOTO_FILES = ["1.jpeg", "2.jpeg", "3.jpeg", "4.jpeg", "6.jpeg", "7.jpeg", "8.jpeg", "9.jpeg"];
 
 const getRepoBasePath = () => {
   if (typeof window === "undefined") return "/";
@@ -15,7 +15,8 @@ const getRepoBasePath = () => {
 };
 
 const getPhotoCandidates = (index) => {
-  const fileName = `${index + 1}.jpeg`;
+  const fileName = PHOTO_FILES[index];
+  if (!fileName) return [];
   const envBase = import.meta.env.BASE_URL || "/";
   const repoBase = getRepoBasePath();
   return Array.from(
@@ -143,7 +144,7 @@ export default function SketchDrawApp() {
   const isSadMusicMode = isNoLocked || noCount >= 7;
   const isLoveMusicMode = valentineAccepted && !isSadMusicMode;
   const photoCandidates = useMemo(() => getPhotoCandidates(currentImageIndex), [currentImageIndex]);
-  const currentPhotoSrc = photoCandidates[Math.min(imageAttempt, photoCandidates.length - 1)];
+  const currentPhotoSrc = photoCandidates[Math.min(imageAttempt, Math.max(0, photoCandidates.length - 1))];
   const sadGifCandidates = useMemo(() => getSadGifCandidates(), []);
   const sadGifSrc = sadGifCandidates[Math.min(sadGifAttempt, sadGifCandidates.length - 1)];
   const musicMode = isSadMusicMode ? "sad" : isLoveMusicMode ? "love" : "normal";
@@ -221,7 +222,7 @@ export default function SketchDrawApp() {
   }, [musicLoadFailed, currentMusicSrc]);
 
   const showShadowScreen = isNoLocked || (!valentineAccepted && noCount >= 7);
-  const totalPhotos = PHOTO_COUNT;
+  const totalPhotos = PHOTO_FILES.length;
 
   const changePhoto = (direction) => {
     tryStartMusic();
