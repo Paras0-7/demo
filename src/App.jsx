@@ -78,6 +78,25 @@ const getMusicCandidates = (mode) => {
   );
 };
 
+const getSadGifCandidates = () => {
+  const envBase = import.meta.env.BASE_URL || "/";
+  const repoBase = getRepoBasePath();
+  return Array.from(
+    new Set([
+      `${envBase}sad.gif`,
+      `${envBase}gifs/sad.gif`,
+      `${repoBase}sad.gif`,
+      `${repoBase}gifs/sad.gif`,
+      "/sad.gif",
+      "/gifs/sad.gif",
+      "sad.gif",
+      "gifs/sad.gif",
+      "./sad.gif",
+      "./gifs/sad.gif",
+    ]),
+  );
+};
+
 const readNoLock = () => {
   try {
     return localStorage.getItem(NO_LOCK_KEY) === "1";
@@ -117,7 +136,7 @@ export default function SketchDrawApp() {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageAttempt, setImageAttempt] = useState(0);
   const [heroGifSrc, setHeroGifSrc] = useState("https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif");
-  const [sadGifSrc, setSadGifSrc] = useState(`${import.meta.env.BASE_URL}sad.gif`);
+  const [sadGifAttempt, setSadGifAttempt] = useState(0);
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [musicAttempt, setMusicAttempt] = useState(0);
   const [musicLoadFailed, setMusicLoadFailed] = useState(false);
@@ -125,6 +144,8 @@ export default function SketchDrawApp() {
   const isLoveMusicMode = valentineAccepted && !isSadMusicMode;
   const photoCandidates = useMemo(() => getPhotoCandidates(currentImageIndex), [currentImageIndex]);
   const currentPhotoSrc = photoCandidates[Math.min(imageAttempt, photoCandidates.length - 1)];
+  const sadGifCandidates = useMemo(() => getSadGifCandidates(), []);
+  const sadGifSrc = sadGifCandidates[Math.min(sadGifAttempt, sadGifCandidates.length - 1)];
   const musicMode = isSadMusicMode ? "sad" : isLoveMusicMode ? "love" : "normal";
   const musicCandidates = useMemo(() => getMusicCandidates(musicMode), [musicMode]);
   const currentMusicSrc = musicCandidates[Math.min(musicAttempt, musicCandidates.length - 1)];
@@ -493,8 +514,8 @@ export default function SketchDrawApp() {
               src={sadGifSrc}
               alt="Sad gif"
               onError={() => {
-                if (sadGifSrc !== "/sad.gif") {
-                  setSadGifSrc("/sad.gif");
+                if (sadGifAttempt < sadGifCandidates.length - 1) {
+                  setSadGifAttempt((prev) => prev + 1);
                 }
               }}
               style={{
