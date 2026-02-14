@@ -331,12 +331,18 @@ export default function SketchDrawApp() {
           .question-card {
             width: 98vw !important;
             max-width: 98vw !important;
-            padding: 30px 20px !important;
+            padding: 24px 18px !important;
             box-sizing: border-box !important;
+            min-height: 500px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
           }
           .photo-frame {
             width: 96vw !important;
             max-width: 96vw !important;
+            height: 635px !important;
+            aspect-ratio: auto !important;
           }
           .question-card img,
           .shadow-card img {
@@ -346,8 +352,12 @@ export default function SketchDrawApp() {
           .shadow-card {
             width: min(680px, 98vw) !important;
             max-width: 98vw !important;
-            padding: 30px 20px 34px !important;
+            padding: 24px 18px 28px !important;
             box-sizing: border-box !important;
+            min-height: 635px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
           }
           .shadow-card p {
             font-size: 1.08rem !important;
@@ -364,8 +374,14 @@ export default function SketchDrawApp() {
             border-radius: 16px !important;
             width: 99vw !important;
             max-width: 99vw !important;
-            padding: 26px 18px !important;
+            padding: 20px 14px !important;
             box-sizing: border-box !important;
+          }
+          .question-card {
+            min-height: 500px !important;
+          }
+          .shadow-card {
+            min-height: 635px !important;
           }
           .valentine-actions {
             gap: 10px !important;
@@ -388,6 +404,8 @@ export default function SketchDrawApp() {
           .photo-frame {
             width: 98vw !important;
             max-width: 98vw !important;
+            height: 635px !important;
+            aspect-ratio: auto !important;
           }
           .question-card img,
           .shadow-card img {
