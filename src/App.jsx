@@ -408,6 +408,8 @@ export default function SketchDrawApp() {
       <audio
         ref={audioRef}
         src={currentMusicSrc}
+        autoPlay
+        playsInline
         loop
         preload="auto"
         onEnded={() => setMusicPlaying(false)}
