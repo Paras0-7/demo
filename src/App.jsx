@@ -300,7 +300,7 @@ export default function SketchDrawApp() {
             align-items: stretch !important;
           }
           .app-shell {
-            font-size: 1.22rem !important;
+            font-size: 1.4rem !important;
           }
           .main-container {
             gap: 24px !important;
@@ -317,13 +317,15 @@ export default function SketchDrawApp() {
           .message-title {
             text-align: center !important;
             margin-bottom: 18px !important;
+            font-size: 2.8rem !important;
+            line-height: 1.2 !important;
           }
           .message-copy {
             text-align: center !important;
           }
           .message-copy p {
-            font-size: 1.34rem !important;
-            line-height: 1.85 !important;
+            font-size: 1.7rem !important;
+            line-height: 1.65 !important;
           }
           .carousel-controls {
             flex-wrap: wrap !important;
@@ -332,33 +334,33 @@ export default function SketchDrawApp() {
             width: 96vw !important;
           }
           .carousel-controls button {
-            font-size: 1.15rem !important;
-            min-height: 46px !important;
-            padding: 10px 16px !important;
+            font-size: 1.35rem !important;
+            min-height: 58px !important;
+            padding: 12px 20px !important;
           }
           .carousel-controls span {
-            font-size: 1.12rem !important;
+            font-size: 1.3rem !important;
           }
           .question-title {
-            font-size: 2.4rem !important;
+            font-size: 3rem !important;
             line-height: 1.25 !important;
           }
           .question-subtitle {
-            font-size: 1.36rem !important;
-            line-height: 1.85 !important;
+            font-size: 1.7rem !important;
+            line-height: 1.7 !important;
           }
           .shadow-title {
-            font-size: 2.2rem !important;
+            font-size: 2.8rem !important;
             line-height: 1.3 !important;
           }
           .shadow-copy {
-            font-size: 1.34rem !important;
-            line-height: 1.95 !important;
+            font-size: 1.7rem !important;
+            line-height: 1.75 !important;
           }
           .music-toggle {
-            font-size: 1.12rem !important;
-            min-height: 46px !important;
-            padding: 10px 18px !important;
+            font-size: 1.3rem !important;
+            min-height: 56px !important;
+            padding: 12px 20px !important;
           }
           .question-card {
             width: 98vw !important;
@@ -392,13 +394,13 @@ export default function SketchDrawApp() {
             justify-content: center !important;
           }
           .shadow-card p {
-            font-size: 1.34rem !important;
+            font-size: 1.7rem !important;
             line-height: 2 !important;
           }
           .valentine-actions button {
-            font-size: 1.15rem !important;
+            font-size: 1.4rem !important;
             letter-spacing: 1.4px !important;
-            min-height: 54px !important;
+            min-height: 60px !important;
           }
         }
         @media (max-width: 480px) {
@@ -421,31 +423,31 @@ export default function SketchDrawApp() {
             flex-wrap: wrap !important;
           }
           .valentine-actions button {
-            min-width: 88px !important;
-            min-height: 50px !important;
-            font-size: 1rem !important;
+            min-width: 110px !important;
+            min-height: 62px !important;
+            font-size: 1.35rem !important;
             padding-left: 20px !important;
             padding-right: 20px !important;
           }
           .shadow-card p {
-            font-size: 1.36rem !important;
-            line-height: 2.05 !important;
+            font-size: 1.75rem !important;
+            line-height: 1.75 !important;
           }
           .message-copy p {
-            font-size: 1.2rem !important;
+            font-size: 1.75rem !important;
           }
           .question-title {
-            font-size: 2.2rem !important;
+            font-size: 2.8rem !important;
           }
           .question-subtitle,
           .shadow-copy {
-            font-size: 1.34rem !important;
+            font-size: 1.75rem !important;
           }
           .carousel-controls button {
-            font-size: 1.14rem !important;
+            font-size: 1.35rem !important;
           }
           .carousel-controls span {
-            font-size: 1.12rem !important;
+            font-size: 1.28rem !important;
           }
           .photo-frame {
             width: 98vw !important;
