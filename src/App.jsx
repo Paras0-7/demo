@@ -299,6 +299,9 @@ export default function SketchDrawApp() {
             flex-direction: column !important;
             align-items: stretch !important;
           }
+          .app-shell {
+            font-size: 1.22rem !important;
+          }
           .main-container {
             gap: 24px !important;
             flex-direction: column !important;
@@ -319,7 +322,7 @@ export default function SketchDrawApp() {
             text-align: center !important;
           }
           .message-copy p {
-            font-size: 1.04rem !important;
+            font-size: 1.34rem !important;
             line-height: 1.85 !important;
           }
           .carousel-controls {
@@ -328,12 +331,41 @@ export default function SketchDrawApp() {
             row-gap: 10px !important;
             width: 96vw !important;
           }
+          .carousel-controls button {
+            font-size: 1.15rem !important;
+            min-height: 46px !important;
+            padding: 10px 16px !important;
+          }
+          .carousel-controls span {
+            font-size: 1.12rem !important;
+          }
+          .question-title {
+            font-size: 2.4rem !important;
+            line-height: 1.25 !important;
+          }
+          .question-subtitle {
+            font-size: 1.36rem !important;
+            line-height: 1.85 !important;
+          }
+          .shadow-title {
+            font-size: 2.2rem !important;
+            line-height: 1.3 !important;
+          }
+          .shadow-copy {
+            font-size: 1.34rem !important;
+            line-height: 1.95 !important;
+          }
+          .music-toggle {
+            font-size: 1.12rem !important;
+            min-height: 46px !important;
+            padding: 10px 18px !important;
+          }
           .question-card {
             width: 98vw !important;
             max-width: 98vw !important;
             padding: 24px 18px !important;
             box-sizing: border-box !important;
-            min-height: 500px !important;
+            min-height: 560px !important;
             display: flex !important;
             flex-direction: column !important;
             justify-content: center !important;
@@ -341,7 +373,7 @@ export default function SketchDrawApp() {
           .photo-frame {
             width: 96vw !important;
             max-width: 96vw !important;
-            height: 635px !important;
+            height: 700px !important;
             aspect-ratio: auto !important;
           }
           .question-card img,
@@ -354,34 +386,35 @@ export default function SketchDrawApp() {
             max-width: 98vw !important;
             padding: 24px 18px 28px !important;
             box-sizing: border-box !important;
-            min-height: 635px !important;
+            min-height: 700px !important;
             display: flex !important;
             flex-direction: column !important;
             justify-content: center !important;
           }
           .shadow-card p {
-            font-size: 1.08rem !important;
+            font-size: 1.34rem !important;
             line-height: 2 !important;
           }
           .valentine-actions button {
-            font-size: 0.95rem !important;
+            font-size: 1.15rem !important;
             letter-spacing: 1.4px !important;
+            min-height: 54px !important;
           }
         }
         @media (max-width: 480px) {
           .question-card,
           .shadow-card {
             border-radius: 16px !important;
-            width: 99vw !important;
-            max-width: 99vw !important;
+            width: 100vw !important;
+            max-width: 100vw !important;
             padding: 20px 14px !important;
             box-sizing: border-box !important;
           }
           .question-card {
-            min-height: 500px !important;
+            min-height: 560px !important;
           }
           .shadow-card {
-            min-height: 635px !important;
+            min-height: 700px !important;
           }
           .valentine-actions {
             gap: 10px !important;
@@ -395,16 +428,29 @@ export default function SketchDrawApp() {
             padding-right: 20px !important;
           }
           .shadow-card p {
-            font-size: 1.16rem !important;
+            font-size: 1.36rem !important;
             line-height: 2.05 !important;
           }
           .message-copy p {
-            font-size: 1.1rem !important;
+            font-size: 1.2rem !important;
+          }
+          .question-title {
+            font-size: 2.2rem !important;
+          }
+          .question-subtitle,
+          .shadow-copy {
+            font-size: 1.34rem !important;
+          }
+          .carousel-controls button {
+            font-size: 1.14rem !important;
+          }
+          .carousel-controls span {
+            font-size: 1.12rem !important;
           }
           .photo-frame {
             width: 98vw !important;
             max-width: 98vw !important;
-            height: 635px !important;
+            height: 700px !important;
             aspect-ratio: auto !important;
           }
           .question-card img,
@@ -518,6 +564,7 @@ export default function SketchDrawApp() {
       <button
         onClick={toggleMusic}
         disabled={musicLoadFailed}
+        className="music-toggle"
         style={{
           position: "fixed",
           right: "14px",
@@ -598,7 +645,7 @@ export default function SketchDrawApp() {
                 border: "1px solid rgba(255, 183, 208, 0.55)",
               }}
             />
-            <p style={{
+            <p className="shadow-title" style={{
               color: "#ffdfe9",
               fontSize: "clamp(1.2rem, 2.6vw, 1.5rem)",
               letterSpacing: "3px",
@@ -607,7 +654,7 @@ export default function SketchDrawApp() {
             }}>
               From the shadows, with love
             </p>
-            <p style={{
+            <p className="shadow-copy" style={{
               color: "rgba(255,226,238,0.9)",
               fontSize: "clamp(1.02rem, 3.8vw, 1.12rem)",
               lineHeight: "1.95",
@@ -659,7 +706,7 @@ export default function SketchDrawApp() {
                 border: "1px solid rgba(255, 197, 220, 0.6)",
               }}
             />
-            <p style={{
+            <p className="question-title" style={{
               color: "#ffecef",
               fontSize: "clamp(1.4rem, 3.2vw, 1.8rem)",
               letterSpacing: "2px",
@@ -668,7 +715,7 @@ export default function SketchDrawApp() {
             }}>
               Will you be my Valentine?
             </p>
-            <p style={{
+            <p className="question-subtitle" style={{
               color: "rgba(255,220,235,0.9)",
               fontSize: "clamp(1.02rem, 3.8vw, 1.12rem)",
               lineHeight: "1.8",
