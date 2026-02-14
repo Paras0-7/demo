@@ -17,3 +17,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+@media (max-width: 768px) {
+  html {
+    font-size: 22px;
+    -webkit-text-size-adjust: 115%;
+    text-size-adjust: 115%;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 24px;
+    -webkit-text-size-adjust: 120%;
+    text-size-adjust: 120%;
+  }
+}
