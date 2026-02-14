@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 
 const NO_LOCK_KEY = "valentine_no_lock_v1";
 const RESET_QUERY_KEY = "__resetValentineLock";
@@ -26,6 +26,55 @@ const getPhotoCandidates = (index) => {
       `photos/${fileName}`,
       `./photos/${fileName}`,
     ]),
+  );
+};
+
+const getMusicCandidates = (mode) => {
+  const envBase = import.meta.env.BASE_URL || "/";
+  const repoBase = getRepoBasePath();
+  const primaryNames =
+    mode === "sad"
+      ? ["sad.mp3"]
+      : mode === "love"
+        ? ["love.mp3", "valentine.mp3", "bg.mp3"]
+        : ["valentine.mp3", "bg.mp3", "love.mp3"];
+  const allNames =
+    mode === "sad"
+      ? ["sad.mp3", "love.mp3", "valentine.mp3", "bg.mp3"]
+      : mode === "love"
+        ? ["love.mp3", "valentine.mp3", "bg.mp3", "sad.mp3"]
+        : ["valentine.mp3", "bg.mp3", "love.mp3", "sad.mp3"];
+
+  const candidates = [];
+  for (const fileName of primaryNames) {
+    candidates.push(`${envBase}music/${fileName}`);
+    candidates.push(`${envBase}${fileName}`);
+    candidates.push(`${repoBase}music/${fileName}`);
+    candidates.push(`${repoBase}${fileName}`);
+    candidates.push(`/music/${fileName}`);
+    candidates.push(`/${fileName}`);
+    candidates.push(`music/${fileName}`);
+    candidates.push(fileName);
+    candidates.push(`./music/${fileName}`);
+    candidates.push(`./${fileName}`);
+  }
+
+  // Keep robust fallbacks in case only one file exists under a different name.
+  for (const fileName of allNames) {
+    candidates.push(`${envBase}music/${fileName}`);
+    candidates.push(`${envBase}${fileName}`);
+    candidates.push(`${repoBase}music/${fileName}`);
+    candidates.push(`${repoBase}${fileName}`);
+    candidates.push(`/music/${fileName}`);
+    candidates.push(`/${fileName}`);
+    candidates.push(`music/${fileName}`);
+    candidates.push(fileName);
+    candidates.push(`./music/${fileName}`);
+    candidates.push(`./${fileName}`);
+  }
+
+  return Array.from(
+    new Set(candidates),
   );
 };
 
@@ -58,6 +107,7 @@ const writeNoLock = (locked) => {
 };
 
 export default function SketchDrawApp() {
+  const audioRef = useRef(null);
   const resetRequested = hasResetQuery();
   const [valentineAccepted, setValentineAccepted] = useState(false);
   const [yesScale, setYesScale] = useState(1);
@@ -66,8 +116,18 @@ export default function SketchDrawApp() {
   const [noCount, setNoCount] = useState(() => (resetRequested ? 0 : (readNoLock() ? 7 : 0)));
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageAttempt, setImageAttempt] = useState(0);
+  const [heroGifSrc, setHeroGifSrc] = useState("https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif");
+  const [sadGifSrc, setSadGifSrc] = useState(`${import.meta.env.BASE_URL}sad.gif`);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+  const [musicAttempt, setMusicAttempt] = useState(0);
+  const [musicLoadFailed, setMusicLoadFailed] = useState(false);
+  const isSadMusicMode = isNoLocked || noCount >= 7;
+  const isLoveMusicMode = valentineAccepted && !isSadMusicMode;
   const photoCandidates = useMemo(() => getPhotoCandidates(currentImageIndex), [currentImageIndex]);
   const currentPhotoSrc = photoCandidates[Math.min(imageAttempt, photoCandidates.length - 1)];
+  const musicMode = isSadMusicMode ? "sad" : isLoveMusicMode ? "love" : "normal";
+  const musicCandidates = useMemo(() => getMusicCandidates(musicMode), [musicMode]);
+  const currentMusicSrc = musicCandidates[Math.min(musicAttempt, musicCandidates.length - 1)];
 
   useEffect(() => {
     try {
@@ -98,15 +158,58 @@ export default function SketchDrawApp() {
     setImageAttempt(0);
   }, [currentImageIndex]);
 
+  useEffect(() => {
+    setMusicAttempt(0);
+    setMusicLoadFailed(false);
+  }, [musicMode]);
+
+  const tryStartMusic = () => {
+    if (musicLoadFailed || !audioRef.current) return;
+    const audio = audioRef.current;
+    audio.volume = 0.35;
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.then === "function") {
+      playPromise
+        .then(() => setMusicPlaying(true))
+        .catch(() => setMusicPlaying(false));
+    } else {
+      setMusicPlaying(!audio.paused);
+    }
+  };
+
+  useEffect(() => {
+    tryStartMusic();
+  }, [currentMusicSrc, musicLoadFailed]);
+
+  useEffect(() => {
+    if (musicLoadFailed) return undefined;
+
+    const unlock = () => {
+      tryStartMusic();
+    };
+
+    window.addEventListener("pointerdown", unlock, { passive: true, once: true });
+    window.addEventListener("touchstart", unlock, { passive: true, once: true });
+    window.addEventListener("keydown", unlock, { once: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("touchstart", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+  }, [musicLoadFailed, currentMusicSrc]);
+
   const showShadowScreen = isNoLocked || (!valentineAccepted && noCount >= 7);
   const totalPhotos = PHOTO_COUNT;
 
   const changePhoto = (direction) => {
+    tryStartMusic();
     setCurrentImageIndex((prev) => (prev + direction + totalPhotos) % totalPhotos);
   };
 
   const handleYesClick = () => {
     if (isNoLocked) return;
+    tryStartMusic();
     setNoCount(0);
     setYesScale(1);
     setValentineAccepted(true);
@@ -114,6 +217,7 @@ export default function SketchDrawApp() {
 
   const handleNoClick = () => {
     if (isNoLocked) return;
+    tryStartMusic();
     setNoCount((prev) => {
       const next = Math.min(7, prev + 1);
       if (next >= 7) {
@@ -124,6 +228,17 @@ export default function SketchDrawApp() {
       return next;
     });
     setYesScale((prev) => Math.max(0.3, prev * 0.8));
+  };
+
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+    const audio = audioRef.current;
+    if (musicPlaying) {
+      audio.pause();
+      setMusicPlaying(false);
+      return;
+    }
+    tryStartMusic();
   };
 
   return (
@@ -290,6 +405,46 @@ export default function SketchDrawApp() {
         overflowY: "auto",
         gap: valentineAccepted ? "clamp(20px, 4vw, 40px)" : "0",
       }}>
+      <audio
+        ref={audioRef}
+        src={currentMusicSrc}
+        loop
+        preload="auto"
+        onEnded={() => setMusicPlaying(false)}
+        onPause={() => setMusicPlaying(false)}
+        onPlay={() => setMusicPlaying(true)}
+        onError={() => {
+          if (musicAttempt < musicCandidates.length - 1) {
+            setMusicAttempt((prev) => prev + 1);
+            return;
+          }
+          setMusicLoadFailed(true);
+          setMusicPlaying(false);
+        }}
+      />
+      <button
+        onClick={toggleMusic}
+        disabled={musicLoadFailed}
+        style={{
+          position: "fixed",
+          right: "14px",
+          bottom: "14px",
+          zIndex: 20,
+          border: "1px solid rgba(255,186,214,0.8)",
+          background: "rgba(80, 8, 34, 0.88)",
+          color: "#ffe9f2",
+          borderRadius: "999px",
+          padding: "10px 16px",
+          fontSize: "0.8rem",
+          letterSpacing: "1.2px",
+          textTransform: "uppercase",
+          cursor: musicLoadFailed ? "not-allowed" : "pointer",
+          opacity: musicLoadFailed ? 0.65 : 1,
+          boxShadow: "0 10px 22px rgba(0,0,0,0.35)",
+        }}
+      >
+        {musicLoadFailed ? "No Music File" : musicPlaying ? "Pause Music" : "Play Music"}
+      </button>
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none",
         background: "radial-gradient(ellipse at 20% 50%, rgba(255,196,219,0.26) 0%, transparent 62%), radial-gradient(ellipse at 80% 30%, rgba(255,120,170,0.22) 0%, transparent 56%)" }} />
 
@@ -332,6 +487,23 @@ export default function SketchDrawApp() {
             animation: "heart-card-pop 0.6s ease-out forwards",
             position: "relative",
           }}>
+            <img
+              src={sadGifSrc}
+              alt="Sad gif"
+              onError={() => {
+                if (sadGifSrc !== "/sad.gif") {
+                  setSadGifSrc("/sad.gif");
+                }
+              }}
+              style={{
+                width: "min(320px, 85vw)",
+                height: "auto",
+                borderRadius: "12px",
+                marginBottom: "16px",
+                boxShadow: "0 10px 24px rgba(0,0,0,0.35)",
+                border: "1px solid rgba(255, 183, 208, 0.55)",
+              }}
+            />
             <p style={{
               color: "#ffdfe9",
               fontSize: "clamp(1.2rem, 2.6vw, 1.5rem)",
@@ -375,6 +547,23 @@ export default function SketchDrawApp() {
             textAlign: "center",
             border: "1px solid rgba(255,186,214,0.7)",
           }}>
+            <img
+              src={heroGifSrc}
+              alt="Cute Valentine gif"
+              onError={() => {
+                if (heroGifSrc !== "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif") {
+                  setHeroGifSrc("https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif");
+                }
+              }}
+              style={{
+                width: "min(320px, 84vw)",
+                height: "auto",
+                borderRadius: "14px",
+                marginBottom: "18px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
+                border: "1px solid rgba(255, 197, 220, 0.6)",
+              }}
+            />
             <p style={{
               color: "#ffecef",
               fontSize: "clamp(1.4rem, 3.2vw, 1.8rem)",
@@ -599,15 +788,6 @@ export default function SketchDrawApp() {
           }}>
             <p style={{ marginBottom: "20px", marginTop: "0" }}>
               Happy Valentine's Day, Chhaba the Don.
-            </p>
-            <p style={{ marginBottom: "20px", marginTop: "0" }}>
-              There was a time I felt like my soulmate didn't exist… like maybe destiny forgot about me. Then I found you - and suddenly everything made sense, and love started to feel like home.
-            </p>
-            <p style={{ marginBottom: "20px", marginTop: "0" }}>
-              You didn't just come into my life, you became my peace, my smile, my favorite feeling.
-            </p>
-            <p style={{ marginBottom: "20px", marginTop: "0" }}>
-              On this Valentine's Day, I just want you to know how deeply loved you are and how grateful I am that my heart found you.
             </p>
             <p style={{ marginBottom: "20px", marginTop: "0" }}>
               May every day ahead feel a little softer, a little brighter, and a little more beautiful because we get to walk through it together❤️.
