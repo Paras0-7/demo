@@ -618,8 +618,8 @@ export default function SketchDrawApp() {
           width: "100%",
         }}>
           <div className="shadow-card" style={{
-            maxWidth: "480px",
-            width: "min(480px, 96vw)",
+            maxWidth: "763px",
+            width: "min(763px, 96vw)",
             background: "linear-gradient(145deg, rgba(78,6,27,0.98), rgba(148,20,63,0.98))",
             borderRadius: "26px",
             padding: "30px 26px 34px",
@@ -638,7 +638,7 @@ export default function SketchDrawApp() {
                 }
               }}
               style={{
-                width: "min(320px, 85vw)",
+                width: "min(679px, 85vw)",
                 height: "auto",
                 display: "block",
                 margin: "0 auto 16px",
@@ -649,7 +649,7 @@ export default function SketchDrawApp() {
             />
             <p className="shadow-title" style={{
               color: "#ffdfe9",
-              fontSize: "clamp(1.2rem, 2.6vw, 1.5rem)",
+              fontSize: "calc(clamp(1.2rem, 2.6vw, 1.5rem) + 1.8rem)",
               letterSpacing: "3px",
               textTransform: "uppercase",
               marginBottom: "18px",
@@ -658,7 +658,7 @@ export default function SketchDrawApp() {
             </p>
             <p className="shadow-copy" style={{
               color: "rgba(255,226,238,0.9)",
-              fontSize: "clamp(1.02rem, 3.8vw, 1.12rem)",
+              fontSize: "calc(clamp(1.02rem, 3.8vw, 1.12rem) + 1rem)",
               lineHeight: "1.95",
               margin: 0,
               fontStyle: "italic",
@@ -685,8 +685,8 @@ export default function SketchDrawApp() {
             borderRadius: "18px",
             padding: "26px 24px",
             boxShadow: "0 24px 56px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,166,201,0.62)",
-            maxWidth: "420px",
-            width: "min(420px, 94vw)",
+            maxWidth: "763px",
+            width: "min(763px, 94vw)",
             textAlign: "center",
             border: "1px solid rgba(255,186,214,0.7)",
           }}>
@@ -699,7 +699,7 @@ export default function SketchDrawApp() {
                 }
               }}
               style={{
-                width: "min(320px, 84vw)",
+                width: "min(679px, 85vw)",
                 height: "auto",
                 display: "block",
                 margin: "0 auto 18px",
@@ -710,7 +710,7 @@ export default function SketchDrawApp() {
             />
             <p className="question-title" style={{
               color: "#ffecef",
-              fontSize: "clamp(1.4rem, 3.2vw, 1.8rem)",
+              fontSize: "calc(clamp(1.4rem, 3.2vw, 1.8rem) + 1.8rem)",
               letterSpacing: "2px",
               textTransform: "uppercase",
               marginBottom: "18px",
@@ -719,7 +719,7 @@ export default function SketchDrawApp() {
             </p>
             <p className="question-subtitle" style={{
               color: "rgba(255,220,235,0.9)",
-              fontSize: "clamp(1.02rem, 3.8vw, 1.12rem)",
+              fontSize: "calc(clamp(1.02rem, 3.8vw, 1.12rem) + 1rem)",
               lineHeight: "1.8",
               margin: 0,
             }}>
